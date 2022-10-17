@@ -15,7 +15,9 @@ class OPParser:
             self.sm.update(0)
             if self.sm['controlsState']:
                 self.cs = self.sm['controlsState']
+                print(self.cs)
             sleep(self.dt)
+
 
 
     def get_steer(self):
@@ -54,7 +56,8 @@ if __name__ == "__main__":
     #Main Loop
     ros_rate = rospy.Rate(20)    
     while True:
-        steer = pp.get_steer()
-        msg.data = steer
-        pub.publish(msg)
-        ros_rate.sleep()
+        #steer = pp.get_steer()
+        #msg.data = steer
+        #pub.publish(msg)
+        #ros_rate.sleep()
+        pass
