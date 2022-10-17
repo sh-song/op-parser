@@ -1,4 +1,5 @@
 from cereal.messaging import SubMaster
+from sig_int_handler import Activate_Signal_Interrupt_Handler
 import rospy
 from std_msgs.msg import Float64
 import threading
@@ -19,26 +20,26 @@ class OPParser:
 
     def get_steer(self):
         #TODO: remove other states after check
-        states = [self.cs.lateralControlState.debugState,
-                self.cs.lateralControlState.angleState,
-                self.cs.lateralControlState.pidState,
-                self.cs.lateralControlState.lqrState,
-                self.cs.lateralControlState.indiState]
-        for state in states:
-            if state:
-                print(f"state: {state}")
-                lac_log = state
-                isActive = lac_log.active #self.active
-                steer_angle = lac_log.steeringAngleDeg #CS.steeringAngleDeg
-                steer = lac_log.output #actuators.steer
-                print(f"steer: {steer}")
-                print(f"steer_angle: {steer_angle}")
-                print('--------------------------')
-                #TODO: check steer, steer_angle types
-                return steer_angle 
+        #states = [self.cs.lateralControlState.angleState,
+        #        self.cs.lateralControlState.pidState,
+        #        self.cs.lateralControlState.lqrState,
+        #        self.cs.lateralControlState.indiState]
+        #for state in states[1:]:
+        state = self.cs.lateralControlState.pidState
+        if state:
+            print(f"state: {state}")
+            lac_log = state
+            isActive = lac_log.active #self.active
+            steer_angle = lac_log.steeringAngleDeg #CS.steeringAngleDeg
+            steer = lac_log.output #actuators.steer
+            print(f"steer: {steer}")
+            print(f"steer_angle: {steer_angle}")
+            print('--------------------------')
+            #TODO: check steer, steer_angle types
+            return steer_angle 
 
 if __name__ == "__main__":
-
+    Activate_Signal_Interrupt_Handler()
     #ROS
     rospy.init_node("openpilot", anonymous=False)
     pub = rospy.Publisher("/op_steer", Float64, queue_size=1)
